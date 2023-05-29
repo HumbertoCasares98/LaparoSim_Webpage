@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Python Request</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .loading-overlay.show {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .loading-spinner {
+      border: 16px solid #f3f3f3;
+      border-top: 16px solid #3498db;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form id="usernameForm" class="mt-5">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" class="form-control" id="username" name="username" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <script>
+    document.getElementById("usernameForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevent form submission
+
+      var username = document.getElementById("username").value;
+      if (username.trim() === "") {
+        alert("Please enter a username.");
+        return;
+      }
+
+      var loadingOverlay = document.getElementById("loadingOverlay");
+      loadingOverlay.classList.add("show"); // Show the loading overlay
+
+      // Make the request to the specified endpoint
+      var url = "http://127.0.0.1:8900/run_transferencia?username=" + encodeURIComponent(username);
+      // You can replace the above URL with your desired endpoint URL
+      
+      // For demonstration purposes, display the URL in the console
+      console.log("Request URL:", url);
+
+      // You can use AJAX, Fetch API, or any other method to send the request
+      // Here's an example using the Fetch API:
+      fetch(url)
+        .then(function(response) {
+          // Handle the response here
+          console.log("Response:", response);
+          loadingOverlay.classList.remove("show"); // Hide the loading overlay
+        })
+        .catch(function(error) {
+          // Handle any error that occurs during the request
+          console.error("Error:", error);
+          loadingOverlay.classList.remove("show"); // Hide the loading overlay
+        });
+    });
+  </script>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
