@@ -19,6 +19,7 @@
         $where="WHERE idUser=$idUser";
     }
     */
+
     $mysqli = conectar();
     $res=$mysqli->query("SELECT name, position, exercise, file FROM data");
     
@@ -188,70 +189,41 @@
         </div>
         
         <script>
-            document.getElementById("pegTransferForm").addEventListener("submit", function(event) {
-                event.preventDefault(); // Prevent form submission
+            function handleSubmit(formId, loadingOverlayId, endpoint) {
+                var form = document.getElementById(formId);
+                var usernameInput = form.querySelector("input[name='username']");
+                var username = usernameInput.value;
 
-                var username = document.getElementById("pegTransferUsername").value;
-
-                var loadingOverlay = document.getElementById("pegTransferLoadingOverlay");
+                var loadingOverlay = document.getElementById(loadingOverlayId);
                 loadingOverlay.classList.add("show"); // Show the loading overlay
 
-                var url = "http://127.0.0.1:8900/run?username=" + encodeURIComponent(username);
+                var url = "http://127.0.0.1:8900/"+ endpoint +"?username=" + encodeURIComponent(username);
                 console.log("Request URL:", url);
-
+                
                 fetch(url)
                     .then(function(response) {
-                        console.log("Response of Fetch pegTransferUsername:", response);
+                        console.log("Response of Fetch for " + formId + ":", response);
                         loadingOverlay.classList.remove("show"); // Hide the loading overlay
                     })
                     .catch(function(error) {
-                        console.error("Error during Fetch pegTransferUsername:", error);
+                        console.error("Error during Fetch for " + formId + ":", error);
                         loadingOverlay.classList.remove("show"); // Hide the loading overlay
                     });
+            }
+
+            document.getElementById("pegTransferForm").addEventListener("submit", function(event) {
+                event.preventDefault(); // Prevent form submission
+                handleSubmit("pegTransferForm", "pegTransferLoadingOverlay", "run_transferencia");
             });
 
             document.getElementById("patternCuttingForm").addEventListener("submit", function(event) {
                 event.preventDefault(); // Prevent form submission
-
-                var username = document.getElementById("patternCuttingUsername").value;
-
-                var loadingOverlay = document.getElementById("patternCuttingLoadingOverlay");
-                loadingOverlay.classList.add("show"); // Show the loading overlay
-
-                var url = "http://127.0.0.1:8900/run?username=" + encodeURIComponent(username);
-                console.log("Request URL:", url);
-
-                fetch(url)
-                    .then(function(response) {
-                        console.log("Response of Fetch patternCuttingForm:", response);
-                        loadingOverlay.classList.remove("show"); // Hide the loading overlay
-                    })
-                    .catch(function(error) {
-                        console.error("Error during Fetch patternCuttingForm:", error);
-                        loadingOverlay.classList.remove("show"); // Hide the loading overlay
-                    });
+                handleSubmit("patternCuttingForm", "patternCuttingLoadingOverlay", "run_corte");
             });
 
             document.getElementById("KnotSutureForm").addEventListener("submit", function(event) {
                 event.preventDefault(); // Prevent form submission
-
-                var username = document.getElementById("KnotSutureUsername").value;
-
-                var loadingOverlay = document.getElementById("KnotSutureLoadingOverlay");
-                loadingOverlay.classList.add("show"); // Show the loading overlay
-
-                var url = "http://127.0.0.1:8900/run?username=" + encodeURIComponent(username);
-                console.log("Request URL:", url);
-
-                fetch(url)
-                    .then(function(response) {
-                        console.log("Response of Fetch KnotSutureForm:", response);
-                        loadingOverlay.classList.remove("show"); // Hide the loading overlay
-                    })
-                    .catch(function(error) {
-                        console.error("Error during Fetch KnotSutureForm:", error);
-                        loadingOverlay.classList.remove("show"); // Hide the loading overlay
-                    });
+                handleSubmit("KnotSutureForm", "KnotSutureLoadingOverlay", "run_sutura");
             });
         </script>
 
